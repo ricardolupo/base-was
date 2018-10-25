@@ -1,0 +1,45 @@
+---
+driver:
+  name: ec2
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centosWAS
+    driver:
+      image_id: ami-986047f2
+      
+      aws_ssh_key_id: cad_demo_east
+      
+      region: us-east-1
+      availability_zone: us-east-1c
+      require_chef_omnibus: true
+      instance_type: m3.medium
+    transport:
+      username: root
+      ssh_key: ~/.ssh/cad_demo_east.pem
+
+suites:
+  - name: default
+    run_list:
+      - recipe[base-was::default]
+    attributes:
+      base_was: 
+        iim: 
+          user: root
+          group: root
+          access_mode: admin
+          install_file_uri: https://s3-eu-west-1.amazonaws.com/websphere-demo/Install_Mgr_v1.6.2_Lnx_WASv8.5.5.zip
+        was: 
+          install_file_uris: 
+            - "https://s3-eu-west-1.amazonaws.com/websphere-demo/WASND_v8.5.5_1of3.zip"
+            - "https://s3-eu-west-1.amazonaws.com/websphere-demo/WASND_v8.5.5_2of3.zip"
+            - "https://s3-eu-west-1.amazonaws.com/websphere-demo/WASND_v8.5.5_3of3.zip"
+          jdbc: 
+            oracle: 
+              url: https://s3-eu-west-1.amazonaws.com/oracle-demo/ojdbc6.jar
+              ds:
+                DB1:
+                  defaultDatabaseURL: "jdbc:oracle:thin:@//92.168.56.44:1521/DB1"
+
