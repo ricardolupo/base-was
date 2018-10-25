@@ -10,7 +10,7 @@ platforms:
     driver:
       image_id: ami-986047f2
       
-      aws_ssh_key_id: cad_demo_east
+      aws_ssh_key_id: ENV['EC2_SSH_KEY_PATH']
       
       region: us-east-1
       availability_zone: us-east-1c
@@ -18,7 +18,7 @@ platforms:
       instance_type: m3.medium
     transport:
       username: root
-      ssh_key: ~/.ssh/cad_demo_east.pem
+      ssh_key: ENV['EC2_SSH_KEY_PATH']
 
 suites:
   - name: default
